@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Black Rose Love Story</title>
+<meta name="description" content="A premium interactive romantic story." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ================= LOADING SCREEN ================= -->
+<div id="loader">
+  <div class="loader-rose">🌹</div>
+  <p class="loader-text">Unfolding our story…</p>
+</div>
+
+<!-- ================= AMBIENT LAYERS (stars / petals / fireflies / cursor) ================= -->
+<canvas id="stars-canvas"></canvas>
+<div id="petal-layer" aria-hidden="true"></div>
+<div id="firefly-layer" aria-hidden="true"></div>
+<div id="cursor-sparkle" aria-hidden="true"></div>
+<div id="floating-hearts" aria-hidden="true"></div>
+
+<!-- ================= MUSIC PLAYER ================= -->
+<button id="music-toggle" aria-label="Play romantic piano music" aria-pressed="false">
+  <span class="music-icon">♪</span>
+</button>
+<audio id="bg-music" loop preload="none">
+  <source src="music/piano.mp3" type="audio/mpeg" />
+</audio>
+
+<!-- ================= NAV PROGRESS ================= -->
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<main>
+
+  <!-- ============================================================ -->
+  <!-- 1. HERO -->
+  <!-- ============================================================ -->
+  <section id="hero" aria-label="Opening">
+    <div class="hero-bg" style="background-image:url('images/photo1.jpg');"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="eyebrow">a black rose love story</p>
+      <h1 class="hero-title">For the girl who <span>presses roses</span><br/> between the pages of her books</h1>
+      <p class="hero-subtitle" id="typewriter"></p>
+      <button class="btn-gold" id="open-heart-btn">Open My Heart</button>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 2. 3D OPENING BOOK -->
+  <!-- ============================================================ -->
+  <section id="story-book" aria-label="Our Story">
+    <h2 class="section-title">Our Story</h2>
+    <div class="book" id="opening-book" tabindex="0" role="button" aria-label="Open the book to read our story">
+      <div class="book-cover">
+        <div class="book-cover-front">
+          <span class="book-emblem">🖤</span>
+          <h3>Our Story</h3>
+          <p>tap to open</p>
+        </div>
+      </div>
+      <div class="book-pages">
+        <div class="book-page">
+          <h4>Chapter One</h4>
+          <p>Every love story is beautiful shyd kuch ki happy ending na ho But hmari to story hmare liye favourite hai..! Because isme aap ho..Hmari Tamatar ... aapka hona is beautiful...thoda kalshi ho wesie... thoda zydaaa.... But wo apka sbse acha part hai hmare liye...!
+          </p>
+        </div>
+        <div class="book-page">
+          <h4>Chapter Two</h4>
+          <p>Um... hm dono bond shyd aapko smjh na aaye pr...hmse expectation rkhna apka ...hme alg bnata oro sai...sara din kheti mai akele rhe skti...blah blah...at the end wo baby corner mai sai jb aata... i need a Hug ...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 3. APOLOGY LETTER -->
+  <!-- ============================================================ -->
+  <section id="apology" aria-label="An Apology">
+    <h2 class="section-title">An Apology, Written Honestly</h2>
+    <div class="glass-card letter-card">
+      <p class="letter-body" contenteditable="true" spellcheck="false">
+        SO Hey Miss ... 
+        I am sorry my cupcake ...!Hmne apko last time birthday pr Bare minimum wala kam kra tha and uske liye to hme divorce milna chaiye.... But aapne daya kri and...u give me a chance so ha is bar hm dhyan rkhenge wrna yaad hai hme 2 din tk baat ni krogi.. 
+        and   i am so sorry miss... maaf kr dijiye..
+      </p>
+      <p class="letter-signature">Forever yours,</p>
+      <p class="signature-name">— Veenu</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 4. MEMORY CARDS -->
+  <!-- ============================================================ -->
+  <section id="memories" aria-label="Our Memories">
+    <h2 class="section-title">Memories I Keep</h2>
+    <div class="memory-grid" id="memory-grid">
+      <!-- Cards injected by script.js (unlimited/data-driven) -->
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 5. POLAROID GALLERY -->
+  <!-- ============================================================ -->
+  <section id="gallery" aria-label="Polaroid Gallery">
+    <h2 class="section-title">Little Moments</h2>
+    <div class="polaroid-grid" id="polaroid-grid"></div>
+  </section>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+    <button id="lightbox-close" class="lightbox-btn lightbox-close" aria-label="Close">✕</button>
+    <button id="lightbox-prev" class="lightbox-btn lightbox-prev" aria-label="Previous photo">‹</button>
+    <img id="lightbox-img" src="" alt="" />
+    <button id="lightbox-next" class="lightbox-btn lightbox-next" aria-label="Next photo">›</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 6. TIMELINE -->
+  <!-- ============================================================ -->
+  <section id="timeline" aria-label="Our Timeline">
+    <h2 class="section-title">The Story So Far</h2>
+    <div class="timeline-line" aria-hidden="true"></div>
+    <ol class="timeline-list">
+      <li class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content glass-card">
+          <span class="timeline-tag">Our First Deep Convo</span>
+          <p>Apko smjhne mai acha lgtaaa..!</p>
+        </div>
+      </li>
+      <li class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content glass-card">
+          <span class="timeline-tag">Pheli Ldai</span>
+          <p>Lga tha sb khtm..but wo bs shuruwat thi..</p>
+        </div>
+      </li>
+      <li class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content glass-card">
+          <span class="timeline-tag">First Date online wala</span>
+          <p>11 July.. propose ko purpose likh ke kra tha..!</p>
+        </div>
+      </li>
+      <!-- <li class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content glass-card">
+          <span class="timeline-tag">Love</span>
+          <p>The moment I knew — quietly, completely, without a doubt.</p>
+        </div>
+      </li> -->
+      <!-- <li class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content glass-card">
+          <span class="timeline-tag">Today</span>
+          <p>Still choosing you, every single morning.</p>
+        </div>
+      </li>
+      <li class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content glass-card">
+          <span class="timeline-tag">Future</span>
+          <p>A whole lifetime of chapters we haven't written yet.</p> -->
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 7. 100 REASONS -->
+  <!-- ============================================================ -->
+  <section id="reasons" aria-label="100 Reasons I Love You">
+    <h2 class="section-title">100 Reasons I Love You</h2>
+    <div class="reasons-grid" id="reasons-grid"></div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 8. BLACK ROSE GARDEN -->
+  <!-- ============================================================ -->
+  <section id="rose-garden" aria-label="Black Rose Garden">
+    <h2 class="section-title">The Black Rose Garden</h2>
+    <p class="section-subtitle">Click a rose to uncover a hidden note.</p>
+    <div class="rose-garden-grid" id="rose-garden-grid"></div>
+    <div class="rose-note glass-card" id="rose-note" hidden>
+      <p id="rose-note-text"></p>
+      <button class="btn-ghost" id="rose-note-close">close</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 9. BOOKSHELF -->
+  <!-- ============================================================ -->
+  <section id="bookshelf" aria-label="Bookshelf">
+    <h2 class="section-title">Our Bookshelf</h2>
+    <div class="shelf" id="bookshelf-grid"></div>
+    <div class="book-modal" id="book-modal" hidden>
+      <div class="book-modal-inner glass-card">
+        <button class="lightbox-btn book-modal-close" id="book-modal-close" aria-label="Close chapter">✕</button>
+        <h3 id="book-modal-title"></h3>
+        <p id="book-modal-text"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 10. PROMISE SECTION -->
+  <!-- ============================================================ -->
+  <section id="promises" aria-label="My Promises">
+    <h2 class="section-title">Promises I Make</h2>
+    <div class="promise-grid">
+      <div class="glass-card promise-card">
+        <span class="promise-icon">🤍</span>
+        <h4>To Listen</h4>
+        <p>Really listen — not to reply, but to understand you.</p>
+      </div>
+      <div class="glass-card promise-card">
+        <span class="promise-icon">🌹</span>
+        <h4>To Choose You</h4>
+        <p>On the easy days and the hard ones, again and again.</p>
+      </div>
+      <div class="glass-card promise-card">
+        <span class="promise-icon">📖</span>
+        <h4>To Grow</h4>
+        <p>To keep learning how to love you better, one chapter at a time.</p>
+      </div>
+      <div class="glass-card promise-card">
+        <span class="promise-icon">✨</span>
+        <h4>To Stay</h4>
+        <p>Through the quiet nights and the loud ones — I'm not going anywhere.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 11. FUTURE DREAMS -->
+  <!-- ============================================================ -->
+  <section id="dreams" aria-label="Future Dreams">
+    <h2 class="section-title">Our Future, As I Imagine It</h2>
+    <div class="dreams-grid" id="dreams-grid"></div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 12. FINAL LOVE LETTER -->
+  <!-- ============================================================ -->
+  <section id="final-letter" aria-label="Final Love Letter">
+    <div class="final-letter-inner">
+      <p class="final-letter-text" id="final-letter-text">
+        If you're reading this, know that every word above was true, and every word below is too: I love you — not the version of you I imagined, but exactly who you are. Black roses, book-worn hands, and all. Thank you for letting me love you.
+      </p>
+      <p class="final-letter-sign">— always, completely, yours</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 13. WILL YOU FORGIVE ME -->
+  <!-- ============================================================ -->
+  <section id="forgive" aria-label="Will You Forgive Me">
+    <h2 class="section-title">Will You Forgive Me?</h2>
+    <div class="forgive-buttons">
+      <button class="btn-gold" id="yes-btn">YES ❤️</button>
+      <button class="btn-ghost" id="no-btn">NO 😅</button>
+    </div>
+    <div class="forgive-message" id="forgive-message" hidden>
+      <p>You just made me the happiest person ❤️</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 14. FOOTER -->
+  <!-- ============================================================ -->
+  <footer id="site-footer">
+    <p class="footer-quote">"In a garden of roses, be the black one — rare, deep, and unforgettable."</p>
+    <div class="footer-socials">
+      <a href="#" aria-label="Instagram">◈</a>
+      <a href="#" aria-label="Spotify">♫</a>
+      <a href="#" aria-label="Message">✉</a>
+    </div>
+    <p class="footer-made">Made with 🖤 for you.</p>
+  </footer>
+
+</main>
+
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+<script src="script.js"></script>
+</body>
+</html>
